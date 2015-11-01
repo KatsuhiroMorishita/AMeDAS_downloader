@@ -70,8 +70,12 @@ class amedas_node:
 
 		print("--target url--")
 		print(url)
-		response = urllib.request.urlopen(url)
-		html = response.read()
+		html = None
+		try:
+			response = urllib.request.urlopen(url)
+			html = response.read()
+		except Exception as e:
+			print("--download error--", str(e))
 		return html
 
 	def save(self, _type="10min", date=None):
