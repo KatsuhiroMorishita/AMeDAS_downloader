@@ -3,6 +3,7 @@
 #----------------------------------------
 # name: download
 # purpose: 気象庁のアメダスから過去の気象データをダウンロードする
+# memo: 同じ観測所名に対応できていないことに気が付いた@2016-01-29。例：1462	高松, 47891	高松
 # author: Katsuhiro MORISHITA, 森下功啓
 # created: 2015-08-17
 # lisence: MIT
@@ -192,7 +193,7 @@ def main():
 		for name in target:
 			node = amedas_nodes[name]
 			node.save(_type, t)
-			time.sleep(0.2)
+			time.sleep(0.5)
 		t += td(days=1)
 
 

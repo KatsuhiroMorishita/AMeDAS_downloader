@@ -49,6 +49,9 @@ def get_column_names(lines):
     row = None
     # まずは項目名の候補捜し
     n = None
+    #print(lines)
+    if len(lines) < 130:                         # 存在しない過去情報の場合、130行もない
+        return None
     for i in range(60, 130):                     # 行番号は幅を持たせて走査する
         line = lines[i]
         if "時" in line and "rowspan" in line:   # 項目名には必ず含まれるはず
@@ -98,7 +101,10 @@ def get_data_from_past_format(lines):
     """ 1日毎に更新されるアメダスの過去データが入っているhtmlファイルから観測データを抽出してリストとして返す
     """
     ans = []
-    names, row = get_column_names(lines)    # 項目名と、項目名が含まれる最後の行番号を取得
+    indexes = get_column_names(lines)    # 項目名と、項目名が含まれる最後の行番号を取得
+    if indexes == None:
+        return []
+    names, row = indexes
     #print(names)
     if row != None:                             # 項目が取得できているかを確認
         ans.append(names)
