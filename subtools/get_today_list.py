@@ -51,13 +51,13 @@ def get_block_no(groups_info, target_names, target_name):
 	for group_name in groups_info:
 		internal_dict, names = groups_info[group_name]
 		if target_name in names:
-			if target_name == "竜王山":
-				print("names: ", names)
+			#if target_name == "竜王山":
+			#	print("names: ", names)
 			_score = len(names.intersection(target_names))
 			#print(_score)
 			scores.append(_score)
 			group_score[_score] = group_name
-	if len(scores) > 0:                        # 検査対象の観測所名しか合致しない場合は1だが、何かおかしい（例えば、過去の観測データには無いが最新の観測データはあるなど。考えづらいが。）
+	if len(scores) > 0:                        # 検査対象の観測所名しか合致しない場合は1だが、1は何かおかしい（例えば、過去の観測データには無いが最新の観測データはあるなど。考えづらいが。）
 		score_max = max(scores)
 		group_name = group_score[score_max]
 		#print(group_name)

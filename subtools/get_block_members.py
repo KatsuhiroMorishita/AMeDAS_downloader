@@ -11,7 +11,7 @@ import urllib.request
 import re
 import time
 
-
+# AMeDASの過去の観測データページから、観測所の情報、および観測ブロック名とそこに属する観測所名の一覧を取得する
 group_members = {}
 member_data = {}
 with open("prec_no.txt") as fr:
