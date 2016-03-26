@@ -66,7 +66,7 @@ def get_column_names(lines):
                 '(?: (?P<kind>rowspan|colspan)="(?P<span>\d)")?' \
                 '(?: scope="\w+")?' \
                 '[>]' \
-                '(?P<name>(?:\w|[(]|[)]|[/]|℃|[<]br[>]|・|㎡|％)+)[<]/th[>]'
+                '(?P<name>(?:\w|[(]|[)]|[/]|℃|(?:[<]br[>]|[<]br /[>])|・|㎡|％)+)[<]/th[>]'
                 )                               # 項目名にヒットするパターン
         matchTest1 = p.findall(line)
         #print(matchTest1)
@@ -84,6 +84,8 @@ def get_column_names(lines):
                 for kind, span, name in matchTest1: # マッチした結果（タプルのリスト）を分解しつつ確認
                     if "<br>" in name:
                         name = name.replace("<br>", "")     # 余計な文字列の削除
+                    if "<br />" in name:
+                        name = name.replace("<br />", "")     # 余計な文字列の削除
                     if kind == "colspan":                   #　2行目にさらに細分項目があるとifの中を実行
                         for m in range(0, int(span)):       # 細分項目の数だけループ
                             _name = name + matchTest2[i][2] # 項目名を作る
@@ -94,6 +96,7 @@ def get_column_names(lines):
                 column_names = names
                 row = n + 1
     #print((column_names, row))
+    #exit()
     return (column_names, row)
 
 
