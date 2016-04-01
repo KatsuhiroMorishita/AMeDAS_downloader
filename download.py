@@ -110,7 +110,7 @@ def get_amedas_nodes():
 			field = line.split("\t")
 			field = [None if x == "None" else x for x in field]
 			print(field)
-			prec_no, block_no, name, _id, area_code, group_code = field
+			prec_no, block_no, name, group_name, degree_lat, degree_lon, height, _id, area_code, group_code = field
 			amedas_nodes[block_no] = amedas_node(prec_no, block_no, name, _id, area_code, group_code)
 
 	return amedas_nodes

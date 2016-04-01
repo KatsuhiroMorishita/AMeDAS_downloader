@@ -51,7 +51,7 @@ with open("prec_no.txt") as fr:
 					degree_lon = str(float(lon_deg) + float(lon_min) / 60)
 					degree_lat = str(float(lat_deg) + float(lat_min) / 60)
 					names.add(block_no + "_" + name_kanji)
-					member_data[int(block_no)] = (prec_no, kind, block_no, name_kanji, name_kana, degree_lat, degree_lon, height)
+					member_data[int(block_no)] = (prec_no, kind, block_no, name_kanji, name_kana, str(group_name), degree_lat, degree_lon, height) # group_nameはNoneであることがある（南極とか南極とか南極とか）
 					#print(mem)
 				group_members[group_name] = tuple(names)
 print(group_members)
@@ -63,7 +63,9 @@ with open("amedas_node_list.csv", "w", encoding="utf-8-sig") as fw:
 	block_nos = sorted(member_data.keys())
 	for block_no in block_nos:
 		mem = member_data[block_no]
+		#print(mem)
 		mem = list(mem)
+		#print(mem)
 		s = "\t".join(mem)
 		fw.write(s)
 		fw.write("\n")

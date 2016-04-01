@@ -30,8 +30,9 @@ with open("amedas_node_list.csv", "r", encoding="utf-8-sig") as fr:
 	for line in lines:
 		line = line.rstrip()
 		field = line.split("\t")
-		prec_no, kind, block_no, name_kanji, name_kana, degree_lat, degree_lon, height = field #85	a	1616	北山	ホクザン	33.413333333333334	130.22	339
-		past_node[block_no] = (prec_no, block_no, name_kanji)
+		prec_no, kind, block_no, name_kanji, name_kana, group_name, degree_lat, degree_lon, height = field
+		past_node[block_no] = (prec_no, block_no, name_kanji, group_name, degree_lat, degree_lon, height)
+		print(past_node[block_no])
 
 
 
@@ -44,6 +45,7 @@ with open("AMeDAS_list.csv", "w", encoding="utf-8-sig") as fw:
 			out += today_node[block_no]
 		else:
 			out += ("None", "None", "None")
+		print(out)
 		s = "\t".join(out)
 		fw.write(s)
 		fw.write("\n")
