@@ -7,7 +7,7 @@
 # created: 2015-08-19
 # lisence: MIT
 #----------------------------------------
-import urllib.request
+import requests
 import re
 import time
 
@@ -80,14 +80,14 @@ for i in range(10, 66): # 10 to 66, memo to test.
 
 	html = None
 	try:
-		response = urllib.request.urlopen(_url) # ダウンロード
-		html = response.read()
+		response = requests.get(_url) # ダウンロード
+		response.encoding = "utf-8"  # 気象庁のHPは自動認識に失敗する
+		html = response.text
 		#print(html)
-	except:
-		pass
+	except Exception as e:
+		print(str(e))
 
 	if html != None:
-		html = html.decode("utf-8")             # 文字コードを指定して、文字列に変換
 		#print(html)
 		p = re.compile("<area shape='rect' alt='(?P<name>.+)' coords='.+' href='today-(?P<_id>\d+).html\?areaCode=(?P<area_code>\d+)&groupCode=(?P<group_code>\d+)'/>")
 		match = p.findall(html)

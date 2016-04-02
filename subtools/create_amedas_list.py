@@ -7,7 +7,6 @@
 # created: 2016-03-03
 # lisence: MIT
 #----------------------------------------
-import urllib.request
 import re
 import time
 

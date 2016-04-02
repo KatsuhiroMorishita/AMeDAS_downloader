@@ -10,14 +10,13 @@
 import os
 import sys
 import time
-import urllib.request
+import requests
 from datetime import datetime as dt
 from datetime import timedelta as td
 
 
 start_date = dt(2015,8,1) # 処理期間をこれで表す。どうせ初期化されるので、書き込んでいる日付けはテキトー。
 end_date = dt(2015,8,24)
-
 
 def create_dir(path_list):
     """ 指定されたパスのディレクトリを作成する
@@ -72,8 +71,9 @@ class amedas_node:
 		print(url)
 		html = None
 		try:
-			response = urllib.request.urlopen(url)
-			html = response.read()
+			response = requests.get(url) # ダウンロード
+			response.encoding = "utf-8"   # 気象庁のHPは自動認識に失敗する
+			html = response.text
 		except Exception as e:
 			print("--download error--", str(e))
 		return html
@@ -87,7 +87,7 @@ class amedas_node:
 			_dir = create_dir(_dir_path)
 			fname = self._block_no + "_" + self.name + date.strftime("_%Y_%m_%d") + ".html"
 			path = os.path.join(_dir, fname)
-			with open(path, "wb") as fw:
+			with open(path, "w", encoding="utf-8-sig") as fw:
 				fw.write(html)
 
 	@property

@@ -7,7 +7,7 @@
 # created: 2016-03-02
 # lisence: MIT
 #----------------------------------------
-import urllib.request
+import requests
 import re
 import time
 
@@ -22,15 +22,15 @@ with open("prec_no.txt") as fr:
 		print(_url)
 		html = None
 		try:
-			response = urllib.request.urlopen(_url) # ダウンロード
-			html = response.read()
+			response = requests.get(_url) # ダウンロード
+			response.encoding = "utf-8"   # 気象庁のHPは自動認識に失敗する
+			html = response.text
 			#print(html)
 		except Exception as e:
 			print(str(e))
 
 		
 		if html != None:
-			html = html.decode("utf-8")             # 文字コードを指定して、文字列に変換
 			# グループ名を取得
 			p = re.compile('alt="(?P<group_name>.+)全地点')
 			match = p.search(html)
