@@ -147,6 +147,10 @@ def main():
 			field = line.split("\t")
 			print(field)
 			block_no, name = field
+			while True:                   # Excelで編集した際に文字列先頭の0を無くしちゃうことがあるが、面倒なのでコードで対応
+				if len(block_no) >= 4:
+					break
+				block_no = "0" + block_no
 			target.append(block_no)
 			
 	# もし、最新データが必要であれば設定ファイルの内容を無視して、現時点の時刻データに置き換える
