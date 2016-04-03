@@ -19,19 +19,19 @@ start_date = dt(2015,8,1) # 処理期間をこれで表す。どうせ初期化�
 end_date = dt(2015,8,24)
 
 def create_dir(path_list):
-    """ 指定されたパスのディレクトリを作成する
-    Argv:
-        path_list   <list<str>> 作成するディレクトリ
-                        階層を要素とする。
-    """
-    #print(path_list)
-    dir = ""
-    for men in path_list:
-        dir = os.path.join(dir, men)
-        #print(dir)
-        if not os.path.isdir(dir):
-            os.mkdir(dir)
-    return dir
+	""" 指定されたパスのディレクトリを作成する
+	Argv:
+	    path_list   <list<str>> 作成するディレクトリ
+	                    階層を要素とする。
+	"""
+	#print(path_list)
+	dir = ""
+	for men in path_list:
+		dir = os.path.join(dir, men)
+		#print(dir)
+		if not os.path.isdir(dir):
+			os.mkdir(dir)
+	return dir
 
 
 class amedas_node:
