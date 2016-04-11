@@ -257,26 +257,25 @@ def main():
                 continue
             field = line.split("\t")
             print(field)
-            block_num, name = field
+            block_no, name = field
             while True:                   # Excelで編集した際に文字列先頭の0を無くしちゃうことがあるが、面倒なのでコードで対応
                 if len(block_no) >= 4:
                     break
                 block_no = "0" + block_no
-            target.append(block_no)
-            target.append((block_num, name))
+            target.append((block_no, name))
 
 
-    for block_num, name in target:
+    for block_no, name in target:
         _date = start_date
         while _date <= end_date:                                # 設定日時でループ
-            fname = block_num + "_" + name + "_" + _date.strftime('%Y_%m_%d')    # 読み出すべきファイル名を生成
+            fname = block_no + "_" + name + "_" + _date.strftime('%Y_%m_%d')    # 読み出すべきファイル名を生成
             #print(fname)
             f_html = fname + ".html"
-            target_path = os.path.join("Raw HTML", block_num + "_" + name, _date.strftime('%Y'), f_html)
+            target_path = os.path.join("Raw HTML", block_no + "_" + name, _date.strftime('%Y'), f_html)
             print("target file path: " + target_path)
             if os.path.exists(target_path):
                 f_csv = fname + ".csv"
-                f_path = ["Processed HTML", block_num + "_" + name, _date.strftime('%Y')]   # 生成するファイルを格納するフォルダのパスをリストに生成
+                f_path = ["Processed HTML", block_no + "_" + name, _date.strftime('%Y')]   # 生成するファイルを格納するフォルダのパスをリストに生成
                 dir = create_dir(f_path)                        #　フォルダが無ければ作る
                 c_path = os.path.join(dir, f_csv)               # パスをつないで、ファイルの相対パスを生成
                 #print(c_path)
