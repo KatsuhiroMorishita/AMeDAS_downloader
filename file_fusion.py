@@ -27,6 +27,7 @@ def process(dirPath):
     saveFileName = "fusion.csv"
     savePath = dirPath + "/" + saveFileName
     fw = open(savePath, 'w', encoding='utf-8-sig')
+    index_write_flag = False
     plist =  os.listdir(dirPath)                # 指定されたフォルダ内を走査する
     #print (plist)
     for men in plist:
@@ -39,8 +40,11 @@ def process(dirPath):
                     with open(fname, 'r', encoding='utf-8-sig') as fr:
                         lines = fr.readlines()
                         for line in lines:
-                            if "時" in line: # 項目は飛ばす
-                                continue
+                            if "時" in line:    # 項目は1回だけ書き込んで、後は読み飛ばす
+                                if index_write_flag == True:
+                                    continue
+                                else:
+                                    index_write_flag = True
                             if line != "":
                                 fw.write(line)
     fw.close()
