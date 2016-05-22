@@ -15,8 +15,8 @@ from datetime import datetime as dt
 from datetime import timedelta as td
 
 
-start_date = dt(2015,8,1) # 処理期間をこれで表す。どうせ初期化されるので、書き込んでいる日付けはテキトー。
-end_date = dt(2015,8,24)
+start_date = dt(2016,4,12) # 処理期間をこれで表す。どうせ初期化されるので、書き込んでいる日付けはテキトー。
+end_date = dt(2016,5,13)
 
 def create_dir(path_list):
 	""" 指定されたパスのディレクトリを作成する
@@ -93,6 +93,11 @@ class amedas_node:
 	@property
 	def name(self):
 	    return self._name
+
+	@property
+	def block_no(self):
+		return self._block_no
+	
 	
 
 
