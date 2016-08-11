@@ -101,6 +101,7 @@ def get_column_names(lines):
 def get_data_from_past_format(lines):
     """ 1日毎に更新されるアメダスの過去データが入っているhtmlファイルから観測データを抽出してリストとして返す
     """
+    print("--get_data_from_past_format--")
     ans = []
     indexes = get_column_names(lines)      # 項目名と、項目名が含まれる最後の行番号を取得
     if indexes == None:
@@ -113,7 +114,7 @@ def get_data_from_past_format(lines):
         p = re.compile("\"[>]" +
             "(?P<value>(?:" +
                 "(?:\d+[:]?(?:\d{2})?)" + "|" +
-                "(?:[-]?\d+[.]?\d+(?:[ ][)])?)" + "|" +
+                "(?:[\-]?\d+[.]?\d+[ )\]]?)" + "|" +
                 "(?:\w+(?:[ ][)])?)" + "|" +
                 "(?:[-]+)" + "|" +
                 "(?:[)])" + "|" +
@@ -127,7 +128,7 @@ def get_data_from_past_format(lines):
                 "(?:#)" + "|" +
                 "(?:[*])" + "|" +
                 "(?:.{20,60}FB\w\w\.gif)" + "|" +
-                "(?:[]])"
+                "(?:[\]])" +
             ")?)" +
             "[<][/]td")
         for i in range(row + 1, len(lines)):     # 項目名直後から観測値であることを前提として、走査
@@ -172,7 +173,7 @@ def get_data_from_lasted_format(lines):
                     line = line.replace("\t", "")
                     row += line
                     if "</tr>" in line:  # 文字列のパターンを探して、項目名と観測値を探す
-                        p = re.compile(">(?P<label>(?:[\w℃/\d.\-%]+)|&nbsp;)</td>")
+                        p = re.compile(">(?P<label>(?:[\w℃/\d.\-%\]×)]+)|&nbsp;)</td>")
                         match = p.findall(row)
                         match = [x.replace("&nbsp;", "") for x in match] # 空白コードを置換
                         data.append(match)
@@ -217,7 +218,7 @@ def get_data(lines, date=None):
         data = get_data_from_lasted_format(lines)
 
     # 時刻の処理
-    if date != None:
+    if not date is None:
         temp_data = []
         for x in data:
             t = x[0]
@@ -231,7 +232,7 @@ def get_data(lines, date=None):
             x.insert(0, str(_date))
             temp_data.append(x)
         date = temp_data
-    elif data != None:
+    elif not data is None:
         for i in range(len(data)):
             data[i].insert(0, "")
     return data
