@@ -13,6 +13,7 @@ import time
 import requests
 from datetime import datetime as dt
 from datetime import timedelta as td
+from dateutil.relativedelta import relativedelta
 
 
 start_date = dt(2016,4,12) # 処理期間をこれで表す。どうせ初期化されるので、書き込んでいる日付けはテキトー。
@@ -54,8 +55,10 @@ class amedas_node:
 	def get_data(self, _type="10min", date=None):
 		""" 指定されたデータタイプの観測データをダウンロードする
 		"""
+		# create URL
+		# daily example: http://www.data.jma.go.jp/obd/stats/etrn/view/daily_s1.php?prec_no=86&block_no=47819&year=2017&month=2&day=3&view=
 		url = ""
-		if _type == "10min" or _type == "hourly":
+		if _type == "10min" or _type == "hourly" or _type == "daily":
 			url = "http://www.data.jma.go.jp/obd/stats/etrn/view/" + \
 				_type + "_" + self._url_part + "1.php?" + \
 				"prec_no=" + self._prec_no + \
@@ -130,7 +133,7 @@ def main():
 	if len(argvs) >= 2:
 		_type = argvs[1]
 	else:
-		print("please set argv. e.g. hourly, 10min, real-time.")
+		print("please set argv. e.g. daily, hourly, 10min, real-time.")
 		exit()
 
 	amedas_nodes = get_amedas_nodes()
@@ -169,8 +172,11 @@ def main():
 		for val in target:
 			node = amedas_nodes[val]
 			node.save(_type, t)
-			time.sleep(0.5)
-		t += td(days=1)
+			time.sleep(1.0)
+		if _type == "10min" or _type == "hourly" or _type == "real-time":
+			t += td(days=1)
+		elif _type == "daily":
+			t += relativedelta(months=1)
 
 
 	"""
