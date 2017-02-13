@@ -38,7 +38,7 @@ $ python download.py hourly
 又は
 $ python3 download.py hourly
 
-引数には、"daily", hourly", "10min", "real-time"の3パターンがあります。
+引数には、"daily", hourly", "10min", "real-time"の4パターンがあります。
 それぞれ、日毎のデータ、1時間毎のデータ、10分毎のデータ、リアルタイムのデータを意味しています。
 
 
