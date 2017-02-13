@@ -172,7 +172,7 @@ def main():
 		for val in target:
 			node = amedas_nodes[val]
 			node.save(_type, t)
-			time.sleep(1.0)
+			time.sleep(0.2)
 		if _type == "10min" or _type == "hourly" or _type == "real-time":
 			t += td(days=1)
 		elif _type == "daily":

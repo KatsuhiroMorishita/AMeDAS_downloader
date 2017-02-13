@@ -23,7 +23,7 @@ download.py
 　download.pyは、アメダスが観測した過去の気象データをダウンロードするスクリプトです。過去の1時間毎の観測データ、過去の10分毎の観測データ、最新の観測データをダウンロードすることが出来ます。
 ===
 html_parser.py
-　html_parser.pyは、ダウンロード済みのアメダス観測データをcsv形式に変換するスクリプトです。
+　html_parser.pyは、ダウンロード済みのアメダス観測データをcsv形式に変換するスクリプトです。処理対象期間をAMEDAS.iniで設定します。
 ===
 file_fusion.py
 　file_fusion.pyは「Processed HTML」フォルダ下に存在する処理済みcsvファイルの結合に使用するスクリプトです。実行すると、観測局毎に全観測期間のデータを結合したcsvファイルを作成します。
@@ -38,8 +38,8 @@ $ python download.py hourly
 又は
 $ python3 download.py hourly
 
-引数には、"hourly", "10min", "real-time"の3パターンがあります。
-それぞれ、1時間毎のデータ、10分毎のデータ、リアルタイムのデータを意味しています。
+引数には、"daily", hourly", "10min", "real-time"の3パターンがあります。
+それぞれ、日毎のデータ、1時間毎のデータ、10分毎のデータ、リアルタイムのデータを意味しています。
 
 
 [スクリプトファイルとAMEDAS.iniの文字コード]
