@@ -190,7 +190,7 @@ def get_data_from_past_format(lines):
                 "(?:[\]])" +
             ")?)" +
             "[<][/]td")
-        for i in range(row + 1, len(lines)):     # 項目名直後から観測値であることを前提として、走査
+        for i in range(row, len(lines)):        # 項目名直後から観測値であることを前提として、走査
             line = lines[i]
             if "tr class=" not in line:
                 break
