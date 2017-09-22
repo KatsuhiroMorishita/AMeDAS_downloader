@@ -8,6 +8,7 @@
 # lisence: MIT
 #----------------------------------------
 import os
+import re
 import sys
 import time
 import requests
@@ -152,7 +153,7 @@ def main():
 				continue
 			if "#" in line:
 				continue
-			field = line.split("\t")
+			field = re.split("\t|,|\s+", line)
 			print(field)
 			block_no, name = field
 			while True:                   # Excelで編集した際に文字列先頭の0を無くしちゃうことがあるが、面倒なのでコードで対応
