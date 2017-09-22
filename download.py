@@ -82,17 +82,23 @@ class amedas_node:
 			print("--download error--", str(e))
 		return html
 
-	def save(self, _type="10min", date=None):
+	def save(self, _type="10min", date=None, force=False):
 		""" 指定されたデータタイプの観測データをダウンロードして、規定のディテクトリ構造で保存する
 		"""
-		html = self.get_data(_type, date)
-		if html != None:
-			_dir_path = ["Raw HTML", self._block_no + "_" + self.name, date.strftime("%Y")]
-			_dir = create_dir(_dir_path)
-			fname = self._block_no + "_" + self.name + date.strftime("_%Y_%m_%d") + ".html"
-			path = os.path.join(_dir, fname)
-			with open(path, "w", encoding="utf-8-sig") as fw:
-				fw.write(html)
+		_dir_path = ["Raw HTML", self._block_no + "_" + self.name, date.strftime("%Y")]
+		_dir = create_dir(_dir_path)
+		fname = self._block_no + "_" + self.name + date.strftime("_%Y_%m_%d") + ".html"
+		path = os.path.join(_dir, fname)
+
+		if os.path.exists(path) == False or force == True: # ダウンロード済みでない、またはウンロードが指示されている場合はダウンロードを試みる
+			html = self.get_data(_type, date)
+			if html != None:
+				with open(path, "w", encoding="utf-8-sig") as fw:
+					fw.write(html)
+			return True
+		elif os.path.exists(path):
+			print("{0} is already exist.".format(path))
+			return False
 
 	@property
 	def name(self):
@@ -130,9 +136,12 @@ def get_amedas_nodes():
 def main():
 	# 引数の処理
 	argvs = sys.argv
-	_type = ""
+	_type = ""          # ダウンロードするデータのタイプ（日ごと、1時間ごと、10分ごと）
+	_force = False      # 既にhtmlファイル（中身はチェックしない）があるかどうかに関わらず新規にダウンロードする場合はTrue
 	if len(argvs) >= 2:
 		_type = argvs[1]
+		if "-f" in argvs:
+			_force = True
 	else:
 		print("please set argv. e.g. daily, hourly, 10min, real-time.")
 		exit()
@@ -172,8 +181,9 @@ def main():
 	while t <= end_date:
 		for val in target:
 			node = amedas_nodes[val]
-			node.save(_type, t)
-			time.sleep(0.2)
+			isaccess = node.save(_type, t, force=_force)
+			if isaccess:
+				time.sleep(0.2)
 		if _type == "10min" or _type == "hourly" or _type == "real-time":
 			t += td(days=1)
 		elif _type == "daily":
