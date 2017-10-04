@@ -275,7 +275,7 @@ def get_data_with_pandas(lines):
     # 項目名をセット
     df.loc[-1] = names        # とりあえずは最後に追加
     df.index = df.index + 1   # shifting index
-    df = df.sort()            # sorting by index
+    df = df.sort_index()       # sorting by index
     return df.values.tolist() # pandasによるindexは含まれない
 
 
@@ -366,7 +366,7 @@ def main():
                 continue
             if "#" in line:
                 continue
-            field = line.split("\t")
+            field = re.split("\t|,|\s+", line)
             print(field)
             block_no, name = field
             while True:                   # Excelで編集した際に文字列先頭の0を無くしちゃうことがあるが、面倒なのでコードで対応
