@@ -140,6 +140,9 @@ def main():
 	_force = False      # 既にhtmlファイル（中身はチェックしない）があるかどうかに関わらず新規にダウンロードする場合はTrue
 	if len(argvs) >= 2:
 		_type = argvs[1]
+		if _type not in "daily hourly 10min real-time": # 引数ミスのチェック
+			print("please set argv. e.g. daily, hourly, 10min, real-time.")
+			exit()
 		if "-f" in argvs:
 			_force = True
 	else:
