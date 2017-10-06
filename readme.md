@@ -13,20 +13,19 @@ Windowsでも、Macでも、UbuntuでもPython3がインストールされてい
 ファイルのダウンロード間隔をむやみに小さくせず、気象庁のサーバ負荷を高めない範囲でご使用ください。
 
 ##ファイルの説明
-===
-AMEDAS_list.csv
+AMEDAS_list.csv  
 　“AMEDAS_list.csv”は、アメダスの観測所の情報を格納したcsvファイルです。
-===
-AMEDAS.ini
+ 
+AMEDAS.ini  
 　AMEDAS.iniは、ダウンロード対象の期間とアメダスの観測所の情報を格納した設定ファイルです。実行の前にご確認下さい。
-===
-download.py
+
+download.py  
 　download.pyは、アメダスが観測した過去の気象データをダウンロードするスクリプトです。過去の1時間毎の観測データ、過去の10分毎の観測データ、最新の観測データをダウンロードすることが出来ます。
-===
-html_parser.py
+
+html_parser.py  
 　html_parser.pyは、ダウンロード済みのアメダス観測データをcsv形式に変換するスクリプトです。処理対象期間をAMEDAS.iniで設定します。
-===
-file_fusion.py
+
+file_fusion.py  
 　file_fusion.pyは「Processed HTML」フォルダ下に存在する処理済みcsvファイルの結合に使用するスクリプトです。実行すると、観測局毎に全観測期間のデータを結合したcsvファイルを作成します。
 
 ##実行の方法
