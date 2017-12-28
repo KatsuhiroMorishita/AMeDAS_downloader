@@ -29,6 +29,7 @@ def process(dirPath):
     fw = open(savePath, 'w', encoding='utf-8-sig')
     index_write_flag = False
     plist =  os.listdir(dirPath)                # 指定されたフォルダ内を走査する
+    plist = sorted(plist)
     #print (plist)
     for men in plist:
         fpath = os.path.join(dirPath, men)
