@@ -159,6 +159,7 @@ def get_column_names(lines):
 
 def get_data_from_past_format(lines):
     """ 1日毎に更新されるアメダスの過去データが入っているhtmlファイルから観測データを抽出してリストとして返す
+    記号に関しては、「www.data.jma.go.jp/obd/stats/data/mdrr/man/remark.html」を参照のこと。
     """
     print("--get_data_from_past_format--")
     ans = []
@@ -173,7 +174,7 @@ def get_data_from_past_format(lines):
         p = re.compile("\"[>]" +
             "(?P<value>(?:" +
                 "(?:\d+[:]?(?:\d{2})?)" + "|" +
-                "(?:[\-]?\d+[.]?\d+[ )\]]?)" + "|" +
+                "(?:[\-]?\d+[.]?\d+\s?[ )\]]?)" + "|" +
                 "(?:\w+(?:[ ][)])?)" + "|" +
                 "(?:[-]+)" + "|" +
                 "(?:[)])" + "|" +
