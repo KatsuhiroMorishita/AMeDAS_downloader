@@ -35,6 +35,7 @@ def process(dirPath):
         fpath = os.path.join(dirPath, men)
         if os.path.isdir(fpath):                # 直下のフォルダを対象として処理
             fileList =  glob.glob(dirPath + "/" + men + '/*.csv')   # CSVファイルのリストを作成
+            fileList = sorted(fileList)
             for fname in fileList:
                 bname = os.path.basename(fname)
                 if(bname != saveFileName):
