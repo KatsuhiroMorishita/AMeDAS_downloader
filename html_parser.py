@@ -16,7 +16,7 @@ import sys
 import re
 from datetime import datetime as dt
 from datetime import timedelta as td
-import pandas
+import pandas as pd
 
 
 table_index = {"daily":0, "hourly":0, "10min":0,  "real-time":4} # pandasで解析したときにどの表が観測データかを識別するための番号
@@ -75,7 +75,7 @@ def mearge_table(match_list, table, row):
             index = mem.index("rowspan")
             row_span = int(mem[index + 1])
         while True:
-            if table[row][i] != None:
+            if table[row][i] is not None:
                 i += 1
             else:
                 break
@@ -102,16 +102,17 @@ def get_column_names(lines):
     # まずは項目名の候補捜し
     n = None
     #print(lines)
-    if len(lines) < 130:                       # 存在しない過去情報の場合、130行もない
+    if len(lines) < 120:                       # 存在しない過去情報の場合、行数が少ない（2019年9月現在、阿蘇乙姫で74行）
+        print("len(lines) is less. It may be blank data.")
         return None
-    for i in range(60, 130):                   # 行番号は幅を持たせて走査する
+    for i in range(60, 130):                   # 項目名の行番号を探す。行番号は幅を持たせて走査する
         line = lines[i]
         if ("時" in line and "rowspan" in line) or ("日" in line and "rowspan" in line) : # 項目名には必ず含まれるはず
             n = i
             break
             
     # 次に項目名を取得する
-    if n != None:
+    if n is not None:
         #print("dummy")
         line = lines[n]
         p = re.compile(
@@ -164,11 +165,11 @@ def get_data_from_past_format(lines):
     print("--get_data_from_past_format--")
     ans = []
     indexes = get_column_names(lines)      # 項目名と、項目名が含まれる最後の行番号を取得
-    if indexes == None:
+    if indexes is None:
         return []
     names, row = indexes
     #print(names)
-    if row != None:                        # 項目が取得できているかを確認
+    if row is not None:                        # 項目が取得できているかを確認
         ans.append(names)
         # 観測値にヒットするパターン
         p = re.compile("\"[>]" +
@@ -255,11 +256,11 @@ def get_data_with_pandas(lines):
     print("--get_data_with_pandas--")
     indexes = get_column_names(lines)      # 項目名と、項目名が含まれる最後の行番号を取得
     #print(indexes)
-    if indexes == None:
+    if indexes is None:
         return []
     names, row = indexes
     txt = "\n".join(lines)
-    fetched_dataframes = pandas.io.html.read_html(txt)
+    fetched_dataframes = pd.io.html.read_html(txt)
     df = fetched_dataframes[table_index["daily"]]
     #print(df)
     while True:   # pandsが取得した表に入っている項目名を削除する
@@ -291,13 +292,13 @@ def get_clock(txt):
     #print(matchTest)
     hour = None
     minute = None
-    if matchTest != None:
+    if matchTest is not None:
         #print(matchTest.groups())
         hour = matchTest.group('hour')
-        if hour != None:
+        if hour is not None:
             hour = int(hour)
         minute = matchTest.group('min')
-        if minute != None:
+        if minute is not None:
             minute = int(minute)
         #print(hour, minute)
     return (hour, minute)
@@ -337,7 +338,7 @@ def get_data(lines, date=None):
             else:
                 hour, minute = get_clock(t)
                 #print("--time--", hour, minute)
-                if minute == None:
+                if minute is None:
                     minute = 0
                 _date = dt(year=date.year, month=date.month, day=date.day) + td(hours=hour, minutes=minute)
             x.insert(0, str(_date))
@@ -396,7 +397,7 @@ def main():
                     lines = fr.readlines()
                 data = get_data(lines, _date)
                 #print("--data--", data)
-                if data != None:
+                if data is not None:
                     with open(c_path, "w", encoding="utf-8-sig") as fw:
                         for mem in data:
                             mem = [str(x) for x in mem]
