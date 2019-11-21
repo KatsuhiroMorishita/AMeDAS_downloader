@@ -5,7 +5,7 @@
 # purpose: 気象庁のアメダスから過去の気象データをダウンロードする
 # author: Katsuhiro MORISHITA, 森下功啓
 # created: 2015-08-17
-# lisence: MIT
+# lisence: MIT. If you use this program for your study, you should write Acknowledgement in your paper.
 #----------------------------------------
 import os
 import re

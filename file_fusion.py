@@ -14,7 +14,7 @@
 #                           1時間毎の観測データに対応
 #               2015-08-22 時刻の処理を削除（html_parserに移行）
 # Copyright:   (c) morishita 2012
-# Licence:     MIT
+# Licence:     MIT. If you use this program for your study, you should write Acknowledgement in your paper.
 #-------------------------------------------------------------------------------
 import os
 import re
