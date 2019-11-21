@@ -325,7 +325,7 @@ def get_data(lines, date=None):
         temp_data = []
         for x in data:
             #print("--x--", x)
-            t = x[0]
+            t = str(x[0])    # Python3.7.4の？pandasでは整数化されるので、文字列に変換する
             if "時" in t: # 日時を1列目に加えるために、項目名を増やす
                 x.insert(0, "日時")
                 continue
