@@ -39,7 +39,7 @@ def create_dir(path_list):
 class amedas_node:
 	""" 個々のアメダス観測所に合わせた処理を実装したオブジェクト
 	"""
-	def __init__(self, prec_no, block_no, name, _id, area_code, group_code):
+	def __init__(self, prec_no, block_no, name, _id, area_code, group_code, height):
 		self._block_no = block_no
 		self._prec_no = prec_no
 		self._name = name
@@ -47,6 +47,7 @@ class amedas_node:
 		self._id = _id
 		self._area_code = area_code
 		self._group_code = group_code
+		self._height = float(height)
 
 		if int(self._block_no) < 10000:
 			self._url_part = "a"
@@ -107,6 +108,11 @@ class amedas_node:
 	@property
 	def block_no(self):
 		return self._block_no
+
+	@property
+	def height(self):
+		return self._height
+	
 	
 	
 
@@ -126,7 +132,7 @@ def get_amedas_nodes():
 			field = [None if x == "None" else x for x in field]
 			print(field)
 			prec_no, block_no, name, group_name, degree_lat, degree_lon, height, _id, area_code, group_code = field
-			amedas_nodes[block_no] = amedas_node(prec_no, block_no, name, _id, area_code, group_code)
+			amedas_nodes[block_no] = amedas_node(prec_no, block_no, name, _id, area_code, group_code, height)
 
 	return amedas_nodes
 
@@ -165,7 +171,7 @@ def main():
 				continue
 			if "#" in line:
 				continue
-			field = re.split("\t|,|\s+", line)
+			field = re.split(r"\t|,|\s+", line)
 			print(field)
 			block_no, name = field
 			while True:                   # Excelで編集した際に文字列先頭の0を無くしちゃうことがあるが、面倒なのでコードで対応
