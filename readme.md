@@ -36,12 +36,16 @@ file_fusion.py
 
 以下に、1時間毎のデータをダウンロードする実行コマンドの例を示します。
 
-$ python download.py hourly
-又は
-$ python3 download.py hourly
+$ python download.py hourly  
+又は  
+$ python3 download.py hourly  
 
 引数には、"daily", hourly", "10min", "real-time"の4パターンがあります。
 それぞれ、日毎のデータ、1時間毎のデータ、10分毎のデータ、リアルタイムのデータを意味しています。
+
+**注意**
+気象庁のWebシステムの仕様変更により、real-timeでの取得ができなくなっています。
+対応は未定です。
 
 ## スクリプトファイルとAMEDAS.iniの文字コード
   UTF-8
