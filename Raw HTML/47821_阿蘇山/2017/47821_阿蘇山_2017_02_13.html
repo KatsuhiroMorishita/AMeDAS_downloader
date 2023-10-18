@@ -1,81 +1,58 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+﻿<!doctype html>
+<html lang="ja">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta charset="UTF-8">
 <title>気象庁｜過去の気象データ検索</title>
-<meta name="Author" content="気象庁 Japan Meteorological Agency" />
-<meta name="keywords" content="気象庁 Japan Meteorological Agency" />
-<meta name="description" content="気象庁｜過去の気象データ検索" />
-<meta http-equiv="Content-Style-Type" content="text/css" />
-<meta http-equiv="Content-Script-Type" content="text/javascript" />
-<link rel="stylesheet" type="text/css" href="../../../../com/css/define.css" media="all" />
-<link rel="stylesheet" type="text/css" href="../../css/default.css" media="all" />
-<script language="JavaScript" type="text/JavaScript" src="../js/jquery.js"></script>
+<meta name="Author" content="気象庁 Japan Meteorological Agency">
+<meta name="keywords" content="気象庁 Japan Meteorological Agency">
+<meta name="description" content="気象庁｜過去の気象データ検索">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" type="text/css" href="/com/css/define.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../css/default.css" media="all">
+<script language="JavaScript" type="text/JavaScript" src="/com/js/jquery.js"></script>
 <script language="JavaScript" type="text/JavaScript" src="../js/jquery.tablefix.js"></script>
-<style type="text/css" media="all"><!-- @import url(../../../../com/default.css); --></style>
-<link rel="stylesheet" type="text/css" href="../../css/kako.css" media="all" />
-<link rel="stylesheet" type="text/css" href="../../css/print.css" media="print" />
+<style type="text/css" media="all"><!-- @import url(/com/default.css); --></style>
+<link rel="stylesheet" type="text/css" href="../../css/kako.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../css/print.css" media="print">
 </head>
-
 <body>
 <noscript><div>すべての機能をご利用いただくにはJavascriptを有効にしてください。</div></noscript>
 <!--header start -->
 <div id="header_area">
   <div id="nheader">
-  <div id="logo"><a href="http://www.jma.go.jp/jma/index.html"><img src="http://www.jma.go.jp/jma/com/images/logo.gif" alt="気象庁" width="120" height="67" /></a></div>
-
-  <div id="header_right">
-  <div id="header_link">
-  <ul>
-  <li id="toMain"><a href="#main">本文へ</a></li>
-  <li xml:lang="en" lang="en"><a href="http://www.jma.go.jp/jma/indexe.html">ENGLISH</a></li>
-  <li><a href="http://www.jma.go.jp/jma/kishou/info/goiken.html">ご意見･ご感想</a></li>
-  <li id="siteMap"><a href="http://www.jma.go.jp/jma/kishou/sitemap.html">サイトマップ</a></li>
-  </ul>
-  </div>
-  <!-- search -->
-  <div id="yjsearch" class="watermark">
-  <p>キーワードを入力し検索ボタンを押下ください。</p>
-  <form action="http://www.jma.go.jp/jma/menu/search.html" method="get" id="srch">
-  <input type="search" results="5" name="p" id="srchInput" />
-  <input type="image" src="http://www.jma.go.jp/jma/com/images/btn_search.gif" alt="検索" id="srchBtn" onclick="document.getElementById('srchInput').focus();" />
-  <input type="hidden" id="fr" name="fr" value="cse" />
-  <input type="hidden" id="ei" name="ei" value="utf-8" />
-  <input type="hidden" id="csid" name="csid" value="pD.LqPJKNL6pX5S8V0Zj684fKOuX.849vg9h" />
-  <input type="hidden" name="vs" value="www.jma.go.jp" id="yjInsite" />
-  </form>
-  <img src="http://custom.search.yahoo.co.jp/images/window/pD.LqPJKNL6pX5S8V0Zj684fKOuX.849vg9h.gif" alt="" /> </div>
-  <script type="text/javascript">
-  (function() {
-    var sb = document.getElementById('yjsearch');
-    if (sb && sb.className == 'watermark') {
-      var si = document.getElementById('srchInput');
-      var f = function() { si.className = 'nomark'; };
-      var b = function() {
-        if (si.value == '') {
-          si.className = '';
-        }
-      };
-      si.onfocus = f;
-      si.onblur = b;
-      if (!/[&?]p=[^&]/.test(location.search)) {
-        b();
-      } else {
-        f();
-      }
-    }
-  })();
-</script>
+    <div id="logo"><a href="//www.jma.go.jp/jma/index.html"><img src="//www.jma.go.jp/jma/com/images/logo.gif" alt="気象庁" width="120" height="67" /></a></div>
+    <div id="header2_right">
+      <div id="header2_link">
+        <ul>
+          <li xml:lang="en" lang="en"><a href="//www.jma.go.jp/jma/kokusai/multi.html">Other Languages</a></li>
+        </ul>
+      </div>
+      <div id="header2_link">
+        <ul>
+          <li xml:lang="en" lang="en"><a href="//www.jma.go.jp/jma/indexe.html">ENGLISH</a></li>
+        </ul>
+      </div>
 <!-- search -->
-</div>
-<ul id="gnavi">
-  <li><a href="http://www.jma.go.jp/">ホーム</a></li>
-  <li><a href="http://www.jma.go.jp/jma/menu/menuflash.html">防災情報</a></li>
-  <li><a href="http://www.jma.go.jp/jma/menu/menureport.html" class="on">各種データ・資料</a></li>
-  <li><a href="http://www.jma.go.jp/jma/menu/menuknowledge.html">知識・解説</a></li>
-  <li><a href="http://www.jma.go.jp/jma/menu/menuabout.html">気象庁について</a></li>
-  <li><a href="http://www.jma.go.jp/jma/menu/menulinks.html">案内・申請</a></li>
-  </ul>
+      <div id="gsearch">
+        <form id="cse-search-box" action="//google.com/cse">
+          <input type="hidden" name="cx" value="009950868052057056798:0yrbmp7chwi">
+          <input type="hidden" name="ie" value="UTF-8">
+          <input type="text" name="q">
+          <input type="image" name="sa" src="//www.jma.go.jp/jma/com/images/btn_search6.png" alt="検索">
+        </form>
+        <script type="text/javascript" src="//www.google.com/cse/brand?form=cse-search-box&lang=ja"></script>
+      </div>
+<!-- search end-->
+    </div>
+    <ul id="gnavi">
+      <li><a href="//www.jma.go.jp/">ホーム</a></li>
+      <li><a href="//www.jma.go.jp/jma/menu/menuflash.html">防災情報</a></li>
+      <li><a href="//www.jma.go.jp/jma/menu/menureport.html" class="on">各種データ・資料</a></li>
+      <li><a href="//www.jma.go.jp/jma/menu/areas.html">地域の情報</a></li>
+      <li><a href="//www.jma.go.jp/jma/menu/menuknowledge.html">知識・解説</a></li>
+      <li><a href="//www.jma.go.jp/jma/menu/menuappli.html">各種申請・ご案内</a></li>
+    </ul>
   </div>
 </div>
 <!--header end -->
@@ -85,8 +62,9 @@
 <!-- pankuzu menu -->
 <div class="print">
   <ul class="breadcrumb2">
-  <li><a href="http://www.jma.go.jp/">ホーム</a>&nbsp;&gt;&nbsp;</li>
-  <li><a href="http://www.jma.go.jp/jma/menu/menureport.html">各種データ・資料</a>&nbsp;&gt;&nbsp;</li>
+  <li><a href="//www.jma.go.jp/">ホーム</a>&nbsp;&gt;&nbsp;</li>
+  <li><a href="//www.jma.go.jp/jma/menu/menureport.html">各種データ・資料</a>&nbsp;&gt;&nbsp;</li>
+
   <li><a href="../index.php?prec_no=86&block_no=47821&year=2017&month=02&day=13&view=">過去の気象データ検索</a>&nbsp;&gt;&nbsp;</li>
   <li>１０分ごとの値</li>
   </ul></div>
@@ -96,7 +74,7 @@
 <!-- contents -->
 <h1 class="print">１０分ごとの値</h1>
 
-<div class="print"><table style="float:left"><tr><td><img src="../../data/icon/sellected/table.gif" alt="一覧表"></td><td><img src="../../data/icon/false/graph.gif" alt="グラフ"></td></tr></table><table style="margin-left: auto"><tr><td><a href="10min_s1.php?prec_no=86&block_no=47821&year=2017&month=02&day=13&view=p1s"><img src="../../data/icon/true/scroll_ari.gif" alt="見出しの固定"></a></td><td><a href="../index.php?prec_no=86&block_no=47821&year=2017&month=02&day=13&view=p1"><img src="../../data/icon/true/2menu.gif" alt="メニューに戻る"></a></td></tr></table><table style="float:left;margin-top: 25px"><tr><td><a href="10min_s1.php?prec_no=86&block_no=47821&year=2016&month=02&day=13&view=p1"><img src="../../data/icon/true/year1.gif" alt="前年"></a></td><td><a href="10min_s1.php?prec_no=86&block_no=47821&year=2017&month=01&day=13&view=p1"><img src="../../data/icon/true/month1.gif" alt="前月"></a></td><td><a href="10min_s1.php?prec_no=86&block_no=47821&year=2017&month=02&day=12&view=p1"><img src="../../data/icon/true/day1.gif" alt="前日"></a></td><td></td><td><a href="10min_s1.php?prec_no=86&block_no=47821&year=2017&month=02&day=14&view=p1"><img src="../../data/icon/true/day2.gif" alt="翌日"></a></td><td><a href="10min_s1.php?prec_no=86&block_no=47821&year=2017&month=03&day=13&view=p1"><img src="../../data/icon/true/month2.gif" alt="翌月"></a></td><td><img src="../../data/icon/false/year2.gif" alt="翌年"></td></tr></table><table style="margin-left: auto;margin-top: 25px"><tr><td><a href="daily_s1.php?prec_no=86&block_no=47821&year=2017&month=02&day=13&view=p1"><img src="../../data/icon/true/4daily.gif" alt="日ごとの値"></a></td><td><a href="hourly_s1.php?prec_no=86&block_no=47821&year=2017&month=02&day=13&view=p1"><img src="../../data/icon/true/4hourly.gif" alt="１時間ごとの値"></a></td><td><img src="../../data/icon/sellected/4_10min.gif" alt="１０分ごとの値"></td></tr></table></div><h3 style='padding:0px;margin-bottom:0px'>阿蘇山　2017年2月13日（１０分ごとの値）</h3>
+<div class="print"><table style="float:left"><tr><td><img src="../../data/icon/sellected/table.gif" alt="一覧表"></td><td><img src="../../data/icon/false/graph.gif" alt="グラフ"></td></tr></table><table style="margin-left: auto"><tr><td><a href="10min_s1.php?prec_no=86&block_no=47821&year=2017&month=02&day=13&view=p1s"><img src="../../data/icon/true/scroll_ari.gif" alt="見出しの固定"></a></td><td><a href="../index.php?prec_no=86&block_no=47821&year=2017&month=02&day=13&view=p1"><img src="../../data/icon/true/2menu.gif" alt="メニューに戻る"></a></td></tr></table><table style="float:left;margin-top: 25px"><tr><td><a href="10min_s1.php?prec_no=86&block_no=47821&year=2016&month=02&day=13&view=p1"><img src="../../data/icon/true/year1.gif" alt="前年"></a></td><td><a href="10min_s1.php?prec_no=86&block_no=47821&year=2017&month=01&day=13&view=p1"><img src="../../data/icon/true/month1.gif" alt="前月"></a></td><td><a href="10min_s1.php?prec_no=86&block_no=47821&year=2017&month=02&day=12&view=p1"><img src="../../data/icon/true/day1.gif" alt="前日"></a></td><td></td><td><a href="10min_s1.php?prec_no=86&block_no=47821&year=2017&month=02&day=14&view=p1"><img src="../../data/icon/true/day2.gif" alt="翌日"></a></td><td><a href="10min_s1.php?prec_no=86&block_no=47821&year=2017&month=03&day=13&view=p1"><img src="../../data/icon/true/month2.gif" alt="翌月"></a></td><td><a href="10min_s1.php?prec_no=86&block_no=47821&year=2018&month=02&day=13&view=p1"><img src="../../data/icon/true/year2.gif" alt="翌年"></a></td></tr></table><table style="margin-left: auto;margin-top: 25px"><tr><td><a href="daily_s1.php?prec_no=86&block_no=47821&year=2017&month=02&day=13&view=p1"><img src="../../data/icon/true/4daily.gif" alt="日ごとの値"></a></td><td><a href="hourly_s1.php?prec_no=86&block_no=47821&year=2017&month=02&day=13&view=p1"><img src="../../data/icon/true/4hourly.gif" alt="１時間ごとの値"></a></td><td><img src="../../data/icon/sellected/4_10min.gif" alt="１０分ごとの値"></td></tr></table></div><h3 style='padding:0px;margin-bottom:0px'>阿蘇山（熊本県)　2017年2月13日（１０分ごとの値）</h3>
 <table id='tablefix1' class='data2_s'>
 <tr class="mtx"><th rowspan="2" scope="col">時分</th><th colspan="2" scope="colgroup">気圧(hPa)</th><th rowspan="2" scope="col">降水量<br />(mm)</th><th rowspan="2" scope="col">気温<br />(℃)</th><th rowspan="2" scope="col">相対湿度<br />(％)</th><th colspan="4" scope="colgroup">風向・風速(m/s)</th><th rowspan="2" scope="col">日照<br />時間<br />(分)</th></tr>
 <tr class="mtx" scope="col"><th scope="col">現地</th><th scope="col">海面</th><th scope="col">平均</th><th scope="col">風向</th><th scope="col">最大瞬間</th><th scope="col">風向</th></tr>
@@ -257,7 +235,7 @@
 <td><ul class="pagelink mtx"><li><a href="../../data/mdrr/man/first.html">利用される方へ</a></li></ul></td>
 <td><ul class="pagelink mtx"><li><a href="../../data/mdrr/faq/index_k.html">よくある質問（FAQ）</a></li></ul></td>
 <td><ul class="pagelink mtx"><li><a href="../../data/kaisetu/index.html">気象観測統計の解説</a></li></ul></td>
-<td><ul class="pagelink mtx"><li><a href="http://www.jma.go.jp/jma/press/tenko.html">年・季節・各月の天候</a></li></ul></td>
+<td><ul class="pagelink mtx"><li><a href="//www.jma.go.jp/jma/press/tenko.html">年・季節・各月の天候</a></li></ul></td>
 </tr>
 </table>
 </div>
@@ -267,6 +245,6 @@
 </div>
 </div>
 
-<div id="footer_area"><div id="nfooter"><p>気象庁：〒100-8122東京都千代田区大手町1-3-4  代表電話：03-3212-8341</p><ul><li><a href="http://www.jma.go.jp/jma/kishou/info/coment.html">気象庁ホームページについて</a></li></ul></div></div></body>
+<div id="footer_area"><div id="nfooter"><ul><li><a href="//www.jma.go.jp/jma/kishou/info/coment.html">気象庁ホームページについて</a></li></ul></div></div></body>
 </html>
 

@@ -7,15 +7,16 @@
 # created: 10/12/2013
 # history: 2014-01-19   観測値が確定していない場合に「)」が付くが、これに対応した。
 #          2014-03-20   10分データのhtmlファイルフォーマットに対応していないバグを修正した。 
+#          2023-10-18   HTMLのデータ構造が変更されたことに対応。もう少し整理できると思うが、時間がないので放置。
 # copyright: (c) morishita 2013
 # Licence: MIT. If you use this program for your study, you should write Acknowledgement in your paper.
+#          寄付歓迎
 #-------------------------------------------------------------------------------
 #!/usr/bin/env python
-import os
-import sys
-import re
+import os, sys, re, glob
 from datetime import datetime as dt
 from datetime import timedelta as td
+from dateutil.relativedelta import relativedelta as rd
 import pandas as pd
 
 
@@ -95,6 +96,7 @@ def get_column_names(lines):
     """ 1日毎に更新されるアメダスの過去データが入っているhtmlファイルから観測項目名の一覧をリストで返す
     memo:
     現時点（2017/02/11）では、リアルタイムのデータには対応していない。
+    2023年10月現在、熊本などの大きな観測点のデータにのみ対応
     """
     column_names = []
     row = None
@@ -116,12 +118,12 @@ def get_column_names(lines):
         #print("dummy")
         line = lines[n]
         p = re.compile(
-                '[<]th' \
-                '(?: (?P<kind1>rowspan|colspan)="(?P<span1>\d)")?' \
-                '(?: (?P<kind2>rowspan|colspan)="(?P<span2>\d)")?' \
-                '(?: scope="\w+")?' \
-                '[>]' \
-                '(?P<name>(?:\w|[(]|[)]|[/]|℃|\-|[:]|(?:[<]br[>]|[<]br /[>])|・|㎡|％)+)[<]/th[>]'
+                r'[<]th' \
+                r'(?: (?P<kind1>rowspan|colspan)="(?P<span1>\d)")?' \
+                r'(?: (?P<kind2>rowspan|colspan)="(?P<span2>\d)")?' \
+                r'(?: scope="\w+")?' \
+                r'[>]' \
+                r'(?P<name>(?:\w|[(]|[)]|[/]|℃|\-|[:]|(?:[<]br[>]|[<]br /[>])|・|㎡|％)+)[<]/th[>]'
                 )                               # 項目名にヒットするパターン'
         match = p.findall(line)
         #print("--match--", match)
@@ -172,24 +174,24 @@ def get_data_from_past_format(lines):
     if row is not None:                        # 項目が取得できているかを確認
         ans.append(names)
         # 観測値にヒットするパターン
-        p = re.compile("\"[>]" +
-            "(?P<value>(?:" +
-                "(?:\d+[:]?(?:\d{2})?)" + "|" +
-                "(?:[\-]?\d+[.]?\d+\s?[ )\]]?)" + "|" +
-                "(?:\w+(?:[ ][)])?)" + "|" +
-                "(?:[-]+)" + "|" +
-                "(?:[)])" + "|" +
-                "(?:×)" + "|" +
-                "(?:[/]+)" + "|" +
-                "(?:\d+[<]span style=\"vertical[-]align:super; font-size:80%\"[>][-][<][/]span[>])" + "|" +
-                '(?:[<]img src=".{10,30}[/]F8(?:\w|\d){2}[.]gif"[>])' + "|" +
-                "(?:[+])" + "|" +
-                "(?:\d+&nbsp;(?:[-]|[+])?)" + "|" +
-                "(?:\d+(?:[-]|[+])?)" + "|" +
-                "(?:#)" + "|" +
-                "(?:[*])" + "|" +
-                "(?:.{20,60}FB\w\w\.gif)" + "|" +
-                "(?:[\]])" +
+        p = re.compile(r"\"[>]" +
+            r"(?P<value>(?:" +
+                r"(?:\d+[:]?(?:\d{2})?)" + "|" +
+                r"(?:[\-]?\d+[.]?\d+\s?[ )\]]?)" + "|" +
+                r"(?:\w+(?:[ ][)])?)" + "|" +
+                r"(?:[-]+)" + "|" +
+                r"(?:[)])" + "|" +
+                r"(?:×)" + "|" +
+                r"(?:[/]+)" + "|" +
+                r"(?:\d+[<]span style=\"vertical[-]align:super; font-size:80%\"[>][-][<][/]span[>])" + "|" +
+                r'(?:[<]img src=".{10,30}[/]F8(?:\w|\d){2}[.]gif"[>])' + "|" +
+                r"(?:[+])" + "|" +
+                r"(?:\d+&nbsp;(?:[-]|[+])?)" + "|" +
+                r"(?:\d+(?:[-]|[+])?)" + "|" +
+                r"(?:#)" + "|" +
+                r"(?:[*])" + "|" +
+                r"(?:.{20,60}FB\w\w\.gif)" + "|" +
+                r"(?:[\]])" +
             ")?)" +
             "[<][/]td")
         for i in range(row, len(lines)):        # 項目名直後から観測値であることを前提として、走査
@@ -200,7 +202,7 @@ def get_data_from_past_format(lines):
             #print(matchTest)
             # 値の検査（余計な文字を削除）
             _temp = []
-            p2 = re.compile('(?P<kind>F8(?:\w|\d){2})[.]gif')   # 天気記号にヒットするパターン
+            p2 = re.compile(r'(?P<kind>F8(?:\w|\d){2})[.]gif')   # 天気記号にヒットするパターン
             for men in matchTest:
                 men = men.replace("&nbsp;", "") # 空白を表現するタグを削除
                 matchTest2 = p2.findall(men)    # 一気にリストになるのでfindallを使っている
@@ -234,7 +236,7 @@ def get_data_from_lasted_format(lines):
                     line = line.replace("\t", "")
                     row += line
                     if "</tr>" in line:  # 文字列のパターンを探して、項目名と観測値を探す
-                        p = re.compile(">(?P<label>(?:[\w℃/\d.\-%\]×)]+)|&nbsp;)</td>")
+                        p = re.compile(r">(?P<label>(?:[\w℃/\d.\-%\]×)]+)|&nbsp;)</td>")
                         match = p.findall(row)
                         match = [x.replace("&nbsp;", "") for x in match] # 空白コードを置換
                         data.append(match)
@@ -287,7 +289,7 @@ def get_clock(txt):
     """ 時刻を時と分に分けて返す
     """
     #print(txt)
-    p = re.compile("(?P<hour>\d{1,2})(?:[:](?P<min>\d\d))?")   # 分は10分毎の観測データ以外では省略されている
+    p = re.compile(r"(?P<hour>\d{1,2})(?:[:](?P<min>\d\d))?")   # 分は10分毎の観測データ以外では省略されている
     matchTest = p.match(txt)
     #print(matchTest)
     hour = None
@@ -306,8 +308,9 @@ def get_clock(txt):
 
 
 
-def get_data(lines, date=None):
-    """ 観測データの種類に合わせて処理した結果を返す
+def get_data_47000(lines:list)->pd.DataFrame:
+    """ テキストデータから観測データを抽出して返す
+    block_noが47xxxxの測候所？のデータ処理用
     """
     #print("--get_data--")
     txt = "\n".join(lines)
@@ -320,18 +323,72 @@ def get_data(lines, date=None):
         data = get_data_with_pandas(lines)
         #print("--get_data--", data)
 
-    # 時刻の処理
+    # pandasのDataFrameに変換
+    #print(data)
+    data = pd.DataFrame(data[1:], columns=data[0])
+    #print(data)
+
+    return data
+
+
+
+def get_data_xxxx(lines:list)->pd.DataFrame:
+    """ テキストデータから観測データを抽出して返す
+    block_noが47xxxxの測候所？以外のデータ処理用
+    """
+    txt = "\n".join(lines)
+    data = pd.read_html(txt)[0]   # 0で何時も良いのかは未検証
+    #print(data)
+
+    # 列名を編集（列名が複数行に渡るので、1行にする）
+    c = []
+    for mem in data.columns:
+        if isinstance(mem, tuple) or isinstance(mem, list):
+            unique_member = list(set(mem))
+
+            new_name = ""
+            for m in mem:
+                if m in unique_member:
+                    new_name += m
+                    unique_member.remove(m)
+            #print(new_name)
+            c.append(new_name)
+        else:
+            c.append(mem)
+    data.columns = c
+
+    return data
+
+
+
+def get_data(lines:list, date=None, block_num=None)->pd.DataFrame:
+    """ テキストデータから観測データを抽出して返す
+    日時も付け加える。
+    """
+    print("--get_data--", block_num, date)
+    data = None
+
+    # 表の取得
+    if block_num is not None and int(block_num) < 47000:
+        data = get_data_xxxx(lines)
+    else:
+        data = get_data_47000(lines)
+
+
+    # 日時・時刻の処理
     if not date is None:
+        c_name = data.columns[0]
+        title = ""
+        if "時" in c_name: 
+            title = "日時"
+        elif "日" in c_name:
+            title = "日付"
+
         temp_data = []
-        for x in data:
+        txt = "\n".join(lines)
+        for x in data[c_name].values:
             #print("--x--", x)
-            t = str(x[0])    # Python3.7.4の？pandasでは整数化されるので、文字列に変換する
-            if "時" in t: # 日時を1列目に加えるために、項目名を増やす
-                x.insert(0, "日時")
-                continue
-            elif "日" in t:
-                x.insert(0, "日付")
-                continue
+            t = str(x)
 
             if "日ごとの値" in txt and not "１０分ごとの値" in txt: # 毎月の日毎のデータの場合
                 _date = dt(year=date.year, month=date.month, day=int(t))
@@ -341,17 +398,25 @@ def get_data(lines, date=None):
                 if minute is None:
                     minute = 0
                 _date = dt(year=date.year, month=date.month, day=date.day) + td(hours=hour, minutes=minute)
-            x.insert(0, str(_date))
-            temp_data.append(x)
-        date = temp_data
+            temp_data.append(_date)
+        data.insert(0, title, temp_data)
+
     elif not data is None:
-        for i in range(len(data)):
-            data[i].insert(0, "")
+        data.insert(0, title, "")
+    
+
     return data
 
 
 
 def main():
+    # 引数の処理
+    argvs = sys.argv
+    _type = ""          # ダウンロードするデータのタイプ（日ごと、1時間ごと、10分ごと）
+    if len(argvs) >= 2:
+        _type = argvs[1]
+        
+
     # 処理の対象となっている期間とアメダスの一覧をファイルから読み込む
     start_date = None
     end_date = None
@@ -368,7 +433,7 @@ def main():
                 continue
             if "#" in line:
                 continue
-            field = re.split("\t|,|\s+", line)
+            field = re.split(r"\t|,|\s+", line)
             print(field)
             block_no, name = field
             while True:                   # Excelで編集した際に文字列先頭の0を無くしちゃうことがあるが、面倒なのでコードで対応
@@ -376,35 +441,46 @@ def main():
                     break
                 block_no = "0" + block_no
             target.append((block_no, name))
+    print("term: ", start_date, end_date)
 
 
     for block_no, name in target:
         _date = start_date
-        while _date <= end_date:                                # 設定日時でループ
-            fname = block_no + "_" + name + "_" + _date.strftime('%Y_%m_%d')    # 読み出すべきファイル名を生成
-            #print(fname)
-            f_html = fname + ".html"
-            target_path = os.path.join("Raw HTML", block_no + "_" + name, _date.strftime('%Y'), f_html)
-            print("target file path: " + target_path)
-            if os.path.exists(target_path):
-                f_csv = fname + ".csv"
-                f_path = ["Processed HTML", block_no + "_" + name, _date.strftime('%Y')]   # 生成するファイルを格納するフォルダのパスをリストに生成
-                dir = create_dir(f_path)                        #　フォルダが無ければ作る
-                c_path = os.path.join(dir, f_csv)               # パスをつないで、ファイルの相対パスを生成
-                #print(c_path)
-                lines = []
+
+        # 指定された日付範囲でhtmlファイルをcsvファイルに変換
+        while _date <= end_date:     # 設定日時でループ
+
+            # ファイルの一覧を取得
+            target_dir = os.path.join("Raw HTML", block_no + "_" + name, _date.strftime('%Y'))
+            if _type == "daily":     # 日毎のデータの処理を指示された場合
+                files = glob.glob(target_dir + "/*" + _date.strftime('%Y_%m_*') + ".html")
+            else:
+                files = glob.glob(target_dir + "/*" + _date.strftime('%Y_%m_%d') + ".html")
+
+            for target_path in files:
+                # ファイルを読み込む
+                print("target file path: " + target_path)
                 with open(target_path, "r", encoding="utf-8-sig", errors="ignore") as fr: # 観測データの入ったhtmlファイルを読み込む
                     lines = fr.readlines()
-                data = get_data(lines, _date)
-                #print("--data--", data)
+                data = get_data(lines, _date, block_no)
+
+                # 保存
                 if data is not None:
-                    with open(c_path, "w", encoding="utf-8-sig") as fw:
-                        for mem in data:
-                            mem = [str(x) for x in mem]
-                            fw.write(",".join(mem) + "\n")
+                    f_path = ["Processed HTML", block_no + "_" + name, _date.strftime('%Y')]   # 生成するファイルを格納するフォルダのパスをリストに生成
+                    dir_ = create_dir(f_path)        #　フォルダが無ければ作る
+                    date_first = data.iat[0, 0]      # 記録されている最初の日付
+                    fname = block_no + "_" + name + "_" + date_first.strftime('%Y_%m_%d') + ".csv"
+                    fpath = os.path.join(dir_, fname)               # パスをつないで、ファイルの相対パスを生成
+                    data.to_csv(fpath, encoding="utf-8-sig", index=False)
+
+                    # 保存したファイル内で指定した終了日を過ぎていたら、ループを脱出
+                    if date_first + rd(months=1) > end_date:
+                        break
+
+            if _type == "daily":
+                _date += rd(months=1)
             else:
-                print("target file is not exist.")
-            _date += td(days=1)
+                _date += td(days=1)
 
 
 if __name__ == '__main__':
